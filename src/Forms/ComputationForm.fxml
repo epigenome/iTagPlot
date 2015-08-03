@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+<AnchorPane id="AnchorPane" styleClass="theme" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.ComputationFormController">
+    <stylesheets>
+        <URL value="@/tagviz/FormStyle.css" />
+    </stylesheets>
+   <children>
+      <VBox spacing="10.0">
+         <children>
+            <HBox spacing="40.0">
+               <children>
+                  <BorderPane prefWidth="270.0">
+                     <center>
+                        <Label text="Samples:     " />
+                     </center>
+                     <right>
+                        <Button mnemonicParsing="false" onAction="#chooseSamples" text="Browse" BorderPane.alignment="CENTER" />
+                     </right>
+                     <bottom>
+                        <ListView fx:id="samList" prefHeight="220.0" />
+                     </bottom>
+                  </BorderPane>
+                  <VBox prefWidth="300.0" spacing="10.0">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Label text="Annotation Configuration File:" BorderPane.alignment="CENTER" />
+                           </center>
+                           <right>
+                              <Button mnemonicParsing="false" onAction="#chooseConfFile" text="Browse" BorderPane.alignment="CENTER" />
+                           </right>
+                           <bottom>
+                              <TextField fx:id="confText" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane>
+                           <bottom>
+                              <TextField fx:id="dirText" BorderPane.alignment="CENTER" />
+                           </bottom>
+                           <center>
+                              <Label text="Annotation Base Directory (optional):" BorderPane.alignment="CENTER" />
+                           </center>
+                           <right>
+                              <Button mnemonicParsing="false" onAction="#chooseBaseDir" text="Browse" BorderPane.alignment="CENTER" />
+                           </right>
+                        </BorderPane>
+                        <BorderPane>
+                           <bottom>
+                              <TextField fx:id="outText" BorderPane.alignment="CENTER" />
+                           </bottom>
+                           <center>
+                              <Label text="Output Directory:   " BorderPane.alignment="CENTER" />
+                           </center>
+                           <right>
+                              <Button mnemonicParsing="false" onAction="#chooseOutDir" text="Browse" BorderPane.alignment="CENTER" />
+                           </right>
+                        </BorderPane>
+                        <BorderPane>
+                           <right>
+                              <Button mnemonicParsing="false" onAction="#choosePerl" text="Browse" BorderPane.alignment="CENTER" />
+                           </right>
+                           <bottom>
+                              <TextField fx:id="perlText" BorderPane.alignment="CENTER" />
+                           </bottom>
+                           <center>
+                              <Label text="Perl Path (optional):" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <BorderPane>
+                           <center>
+                              <Label text="Samtools Path (optional):" BorderPane.alignment="CENTER" />
+                           </center>
+                           <right>
+                              <Button mnemonicParsing="false" onAction="#chooseSamtools" text="Browse" BorderPane.alignment="CENTER" />
+                           </right>
+                           <bottom>
+                              <TextField fx:id="samtoolsText" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Running Mode:" />
+                  <HBox spacing="10.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#serialSelected" text="Serial">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="runGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox prefWidth="200.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#coreSelected" text="Multi-core" toggleGroup="$runGroup" />
+                        <Label text="Threads:">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="threadText" prefWidth="50.0">
+                           <HBox.margin>
+                              <Insets left="22.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox spacing="10.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#gridSelected" text="Grid engine" toggleGroup="$runGroup" />
+                        <Label alignment="BOTTOM_LEFT" text="Command:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="gridText" prefWidth="400.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Data Type:" />
+                  <HBox>
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#enrichmentSelected" text="Enrichment">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="dataGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <Label text="Fragment size:">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="fragmentText" prefWidth="50.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Label text="or configuration file:">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="fragFileText">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Button fx:id="fragFileButton" mnemonicParsing="false" onAction="#chooseFragFile" text="Browse">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#betaSelected" text="Beta-score" toggleGroup="$dataGroup" />
+                        <Label text="Column number:">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="columnText" prefWidth="50.0" text="5">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox spacing="10.0">
+               <children>
+                  <Label text="File type:" />
+                  <ComboBox fx:id="formatCombo" prefWidth="100.0">
+                    <items>
+                      <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="BED" />
+                        <String fx:value="BAM" />
+                      </FXCollections>
+                    </items>
+                  </ComboBox>
+                  <Button fx:id="computeButton" mnemonicParsing="false" onAction="#compute" text="Compute">
+                     <HBox.margin>
+                        <Insets left="150.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin></Button>
+               </children>
+            </HBox>
+            <TextArea fx:id="logText" editable="false" prefHeight="150.0" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

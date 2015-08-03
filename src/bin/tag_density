@@ -1,0 +1,343 @@
+#!/usr/bin/env perl
+
+## Author: Jeong-Hyeon Choi
+## Date: 2014
+
+my $version = '0.2';
+my $script = 'feature.pl';
+my ($iName, $iFile, $iID, $iBody, $iStream, $iLen, $iType, $iLast) = 0..7;
+
+use strict;
+use Getopt::Long qw(:config no_ignore_case);
+use File::Basename;
+use File::Which;
+use File::Spec;
+use Cwd 'abs_path';
+use POSIX qw(SIGKILL SIGINT SIGTERM WNOHANG);
+
+my $home = abs_path(dirname(-l $0 ? File::Spec->rel2abs(readlink($0), dirname($0)) : $0));
+$ENV{PATH} = "$home:$home/bin:$ENV{PATH}";
+
+my ($helpFlag, $inDir, $outDir, $verbose, $debug, $quiet, $samtools);
+my ($featConf, $featBase, $fileType, $thread, $grid, $fragment, $fragConf, $score, $missing, $binSize, @filters);
+my $process = 0;
+
+GetOptions(
+	"h|?|help"     => \$helpFlag,   
+	"o|output=s"   => \$outDir,
+	"verbose+"     => \$verbose,
+	"quiet"        => \$quiet,
+	"debug"        => \$debug,
+	"t|thread=i"   => \$thread,
+	"g|grid=s"     => \$grid,
+	"conf=s"       => \$featConf,
+	"base=s"       => \$featBase,
+	"type=s"       => \$fileType,
+	"fragment=i"   => \$fragment,
+	"size=s"       => \$fragConf,
+	"score=i"      => \$score,	# use average score
+	"missing"      => \$missing,
+	"bin=i"        => \$binSize,
+	"samtools=s"   => \$samtools,
+) || die "\n";
+
+checkOptions();
+
+my (%features, %sizes);
+my %children;
+
+setpgrp;
+#$SIG{'INT' } = \&catch;
+$SIG{'TERM'} = \&catch;
+
+loadFeatConf($featConf);
+loadFragConf($fragConf) if $fragConf;
+processing();
+
+print("Done\n\n") if !$quiet;
+
+sub processing
+{
+	my ($ncpu, $inFile, $bsMode, $qualType, $mapDir, $mapName) = @_;
+
+	foreach my $file (@ARGV)
+	{
+		print "Running jobs for $file ...\n" if !$quiet;
+		my $pid;
+
+		foreach my $feat (keys %features)
+		{
+			while (keys %children >= $thread)
+			{
+				sleep(10);
+				$pid = waitpid(-1, WNOHANG);
+				#print "status = ", $?, " for $pid\n";
+				exitall(\%children) if $? > 0;
+				delete $children{$pid} if $pid != -1;
+			}
+
+			$pid = fork_child(\&jobUnit, $file, $feat, $outDir);
+			$children{$pid} = $_;
+			sleep(1);
+		}
+	}
+
+	print "Waiting jobs ...\n" if !$quiet;
+	waitAll(\%children);
+}
+
+sub jobUnit
+{
+	my ($inFile, $featName, $outDir) = @_;
+
+	my $outName = basename($inFile); $outName =~ s/\.(bam|bed|bed.gz|gz)//g;
+	if (!-e "$outDir/$featName") { mkdir("$outDir/$featName") || die("ERROR: Can't create $outDir/$featName\n"); }
+	my $cmd = "$grid$^X $home/$script -c $features{$featName}[$iID] -b $features{$featName}[$iBody] -s $features{$featName}[$iStream] -e $features{$featName}[$iLen] -f $features{$featName}[$iFile] -type $fileType -i $inFile -o $outDir/$featName/$outName.$featName.td";
+	$cmd .= " -5end" if $features{$featName}[$iType] eq '5';
+	$cmd .= " -3end" if $features{$featName}[$iType] eq '3';
+	$cmd .= " -score $score" if $score;
+	$cmd .= " -missing NA" if $missing;
+	$cmd .= " -len " . (exists $sizes{$outName} ? $sizes{$outName} : $fragment) if $fragConf || $fragment;
+	$cmd .= " -bin $binSize" if $binSize;
+	$cmd .= " -samtools $samtools" if $samtools;
+	$cmd .= join(" -filter ", "", @filters) if @filters;
+	run('', $cmd);
+}
+
+#-------------------------------------------------------------------------------
+
+sub run
+{
+	my ($job, $cmd) = @_;
+	if ($job) { $cmd = gridCommand($job) . " $cmd"; }
+	print "$cmd\n" if !$quiet && $verbose;
+	$cmd = "echo $cmd" if $debug;
+	!system($cmd) || die "Error in $cmd\n";
+}
+
+sub fork_child
+{
+	my ($child_process_code, @args) = @_;
+	my $pid = fork;
+	die "Can't fork: $!\n" if !defined $pid;
+	return $pid if $pid != 0;
+	# Now in child process
+	$child_process_code->(@args);
+	exit $?;
+}
+
+sub waitAll
+{
+	my ($rjobs) = @_;
+
+	while (keys %$rjobs)
+	{
+		my $pid = waitpid(-1, 0);
+
+		if ($pid == -1)
+		{
+			%$rjobs = ();
+			return;
+		}	
+		elsif ($?)
+		{
+			print "status of $pid = $?\n";
+			exitall($rjobs, $pid);
+		}
+		else
+		{
+			delete $rjobs->{$pid};
+		}
+	}
+}
+
+sub exitall
+{
+	my ($rhash, $pid) = @_;
+
+	#killall(keys %$rhash);
+	kill($$);
+	#kill - SIGKILL, getpgrp;
+	sleep(1);
+
+	if ($pid && exists $rhash->{$pid})
+	{
+		die "\nError occurrend in the job for $rhash->{$pid}\n";
+	}
+	else
+	{
+		die "\nError occurrend in a job\n";
+	}
+}
+
+sub descendants
+{
+	my (@pids) = @_;
+	my %des;
+
+	foreach my $p (@pids)
+	{
+		$des{$p} = 1;
+
+		foreach my $c (`ps -o pid --no-headers --ppid $p`)
+		{
+			my $tem = descendants($c);
+			map {$des{$_}++} keys %$tem;
+		}
+	}
+
+	return \%des;
+}
+
+sub killall
+{
+#	my $des = descendants(@_);
+#	map {kill 15, $_} keys %$des;
+
+# The following works well in shell, but kill GP
+	kill -15, getpgrp 0;
+#	kill -9, getpgrp 0;
+}
+
+sub catch
+{
+	if (!$process)
+	{
+		killall($$);
+		exit -1;
+	}
+}
+
+sub getFile
+{
+	my ($dir, $base, $file, $wild) = @_;
+
+	return $file            if $wild ? <$file.*> : -e $file;
+	return "$file.gz"       if -e "$file.gz";
+	return "$dir/$file"     if $dir && ($wild ? <$dir/$file.*> : -e "$dir/$file");
+	return "$dir/$file.gz"  if $dir && -e "$dir/$file.gz";
+
+	$dir = dirname($base);
+	return "$dir/$file"     if $dir && ($wild ? <$dir/$file.*> : -e "$dir/$file");
+	return "$dir/$file.gz"  if $dir && -e "$dir/$file.gz";
+
+	if (-l $base)
+	{
+		$dir = dirname(File::Spec->rel2abs(readlink($base), dirname($base)));
+		return "$dir/$file"     if $dir && ($wild ? <$dir/$file.*> : -e "$dir/$file");
+		return "$dir/$file.gz"  if $dir && -e "$dir/$file.gz";
+	}
+
+	return $file;
+}
+
+sub getConfFile
+{
+	my ($file) = @_;
+	return -e $file || ! -e "$home/conf/$file" ? $file : "$home/conf/$file";
+}
+
+sub checkFiles
+{
+	foreach (@_)
+	{
+		die "Can't find the file $_\n" if !-e $_ && !-e "$_.gz";
+	}
+}
+
+sub loadFeatConf
+{
+	my ($fileName) = @_;
+
+	print "Loading feature configuration from ", $fileName || 'STDIN', " ...\n" if !$quiet;
+	my $in = openInput($fileName);
+
+	while (<$in>)
+	{
+		next if /^#/ || /^\s*$/;
+		my @a = split;
+
+		if ($a[0] eq 'filter')
+		{
+			push(@filters, $a[1]);
+			print "\tfilter $a[1]\n" if $verbose;
+		}
+		else
+		{
+			die "Wrong format in $fileName\n$_" if @a < $iLast;
+			push(@{$features{$a[$iName]}}, $a[$iName], getFile($featBase, $featConf, $a[$iFile]), @a[$iID..$iType]);
+			print "\t$a[$iName] @{$features{$a[$iName]}}\n" if $verbose;
+		}
+	}
+
+	map {checkFiles($_->[1])} values %features;
+	close($in) if $fileName;
+}
+
+sub loadFragConf
+{
+	my ($fileName) = @_;
+
+	print "Loading fragment configuration from ", $fileName || 'STDIN', " ...\n" if !$quiet;
+	my $in = openInput($fileName);
+
+	while (<$in>)
+	{
+		next if /^#/ || /^\s*$/;
+		my @a = split;
+                $sizes{$a[0]} = $a[1];
+	}
+
+	close($in) if $fileName;
+}
+
+#-------------------------------------------------------------------------------
+
+sub openInput
+{
+	my ($fileName) = @_;
+
+	return *STDIN unless defined $fileName;
+
+	my ($fd);
+	open($fd, $fileName =~ /.gz(ip)?$/ ? "gzip -dc $fileName |" : $fileName =~ /.bz(ip)?2$/ ? "bzip2 -dc $fileName |" : $fileName) || die("Open error: $fileName");
+	return $fd;
+}
+
+sub openOutput
+{
+	my ($fileName) = @_;
+
+	return *STDOUT unless defined $fileName;
+
+	my ($fd);
+	open($fd, $fileName =~ /.gz$/ ? "| gzip -c > $fileName" : $fileName =~ /.bz(ip)?2$/ ? "| bzip2 -zc > $fileName" : ">$fileName") || die("Open error: $fileName");
+	return $fd;
+}
+
+sub checkOptions
+{
+	$thread = 1 if !$thread;
+
+	if ($helpFlag || !$outDir || !@ARGV || !$featConf || !$fileType)
+	{
+		die("Arguments: [options] -conf feature_conf -type bam -o out_dir in_file1 [in_file2 ...]\n"
+		  . "\t-conf      file    configuration file for annotation\n"
+		  . "\t                   with name, path, column number of ID, the number of blocks, and stream size\n"
+		  . "\t-type      string  file type: bam or bed\n"
+		  . "\t-o         dir     output directory\n"
+		  . "\t--- Optional paramerts -----------------------------------------------------------\n"
+		  . "\t-base      dir     base directory for annotation files\n"
+		  . "\t-fragment  int     fragment size if need to lengthen\n"
+		  . "\t-s         int     use score column instead of read coverage for BS-seq and Infinium\n"
+		  . "\t-m                 specify for beta value, i.e., BS-seq and Infinium\n"
+		  . "\t-thread    int     number of thread\n"
+		  . "\t-grid      string  command line for grid engine\n"
+		  );
+	}
+
+	if (!-e $outDir) { mkdir($outDir) || die("ERROR: Can't create $outDir\n"); }
+	$featConf = getConfFile($featConf) if $featConf;
+	$grid = '' if !defined $grid;
+	$grid .= ' ' if $grid && $grid !~ / $/;
+}

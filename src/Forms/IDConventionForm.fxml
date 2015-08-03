@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" styleClass="theme" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.IDConventionFormController">
+    <stylesheets>
+        <URL value="@/tagviz/FormStyle.css" />
+    </stylesheets>
+   <children>
+      <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Label focusTraversable="false" text="Enter delimeters and starting and end indices." textFill="BLUE" wrapText="true">
+                <styleClass>
+                   <String fx:value="toplabel" />
+                </styleClass>  
+            </Label>
+            <Separator focusTraversable="false" prefWidth="200.0" />
+            <GridPane hgap="10.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" minWidth="10.0" prefWidth="130.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label focusTraversable="false" text="Feature in Sample:" />
+                  <Label fx:id="samLabel" focusTraversable="false" prefWidth="200.0" GridPane.columnIndex="1" />
+                  <Label focusTraversable="false" text="Feature in Group:" GridPane.rowIndex="1" />
+                  <Label fx:id="grpLabel" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label focusTraversable="false" text="Converted Feature:" textFill="RED" GridPane.rowIndex="2" />
+                  <Label fx:id="conLabel" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+            <Separator focusTraversable="false" prefWidth="200.0" />
+            <GridPane alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="50.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label focusTraversable="false" text="Delimiters" />
+                  <Label focusTraversable="false" text="Starting Index" GridPane.rowIndex="1" />
+                  <Label focusTraversable="false" text="End Index" GridPane.rowIndex="2" />
+                  <TextField fx:id="delText" onKeyReleased="#onKeyReleased" GridPane.columnIndex="1" />
+                  <TextField fx:id="startText" onKeyReleased="#onKeyReleased" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="endText" onKeyReleased="#onKeyReleased" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+            <HBox alignment="CENTER" spacing="20.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#okAction" text="OK" />
+                  <Button mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

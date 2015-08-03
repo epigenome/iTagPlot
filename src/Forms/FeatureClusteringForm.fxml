@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefWidth="300.0" styleClass="theme" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.FeatureClusteringFormController">
+    <children>
+        <VBox>
+            <children>
+                <GridPane vgap="10.0" BorderPane.alignment="CENTER">
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                  </rowConstraints>
+                  <children>
+                      <Label text="Number of clusters" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                      <Label text="Distance metric" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                      <Label text="Sample-wise" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                      <Label text="Prefix" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                      <Label text="Save result" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+
+                      <TextField fx:id="txtNumClusters" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                      <ComboBox fx:id="cmbDistance" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                              <String fx:value="Manhattan" />
+                              <String fx:value="Euclidean" />
+                            </FXCollections>
+                        </items>
+                      </ComboBox>
+                      <CheckBox fx:id="chkSamplewise" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                      <TextField fx:id="txtPrefix" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                      
+                      <HBox GridPane.columnIndex="1" GridPane.rowIndex="4" prefHeight = "30" alignment="CENTER_LEFT"  >
+                        <HBox.margin>
+                            <Insets top="0" left="0" bottom="0" right="0"/>
+                        </HBox.margin>
+                        <children>
+                            <TextField fx:id="txtSaveFile" editable="false"   />
+                            <Button    text="..." onAction="#openFileDialog" />
+
+                        </children>
+                      </HBox>
+
+                   </children>
+                </GridPane>
+
+                <HBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+                    <children>
+                       <Button mnemonicParsing="false" onAction="#okAction" text="OK" />
+                       <Button mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
+                    </children>
+                </HBox>
+            </children>    
+            <AnchorPane.bottomAnchor>30</AnchorPane.bottomAnchor>
+            <AnchorPane.leftAnchor>  10</AnchorPane.leftAnchor>
+            <AnchorPane.rightAnchor> 10</AnchorPane.rightAnchor>
+            <AnchorPane.bottomAnchor>30</AnchorPane.bottomAnchor>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@/tagviz/FormStyle.css" />
+    </stylesheets>
+</AnchorPane>

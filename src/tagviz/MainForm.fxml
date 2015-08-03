@@ -1,0 +1,1115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import doubleslider.DoubleSlider?>
+
+<AnchorPane id="AnchorPane" fx:id="Base" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" styleClass="theme" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tagviz.MainFormController">
+  <children>
+    <VBox id="VBox" alignment="TOP_CENTER" spacing="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <HBox id="HBox" alignment="TOP_LEFT" onMouseEntered="#HidePopPanels" prefHeight="26.0" prefWidth="800.0" spacing="0.0" VBox.vgrow="NEVER">
+          <children>
+            <MenuBar maxHeight="26.0" maxWidth="1.7976931348623157E308" minHeight="26.0" pickOnBounds="false" prefHeight="26.0" prefWidth="-1.0" useSystemMenuBar="false" HBox.hgrow="ALWAYS">
+              <menus>
+                <Menu mnemonicParsing="false" text="Computation">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#RunComputation" text="Tag Density">
+                      <accelerator>
+                        <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                      </accelerator>
+                    </MenuItem>
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Sample">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#UploadSample" text="Open Sample">
+                      <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                      </accelerator>
+                    </MenuItem>
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem fx:id="dcsmenu" mnemonicParsing="false" onAction="#DeleteCheckedSamples" text="Delete Checked Sample" />
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="casmenu" mnemonicParsing="false" onAction="#CheckAllSamples" text="Check All" />
+                              <MenuItem fx:id="uasmenu" mnemonicParsing="false" onAction="#UncheckAllSamples" text="Uncheck All" />
+                              <MenuItem fx:id="icsmenu" mnemonicParsing="false" onAction="#InvertCheckedSamples" text="Invert Check" />
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#ExitApplication" text="Exit">
+                      <accelerator>
+                        <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                      </accelerator>
+                    </MenuItem>
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Group">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#UploadGroup" text="Open Group">
+                          <accelerator>
+                            <KeyCodeCombination alt="UP" code="G" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                          </accelerator>
+                        </MenuItem>
+                        <Menu mnemonicParsing="false" text="Quantity Group">
+                          <items>
+                            <MenuItem fx:id="qmMenu" mnemonicParsing="false" onAction="#OpenQuantity" text="Microarray" />
+                              <MenuItem fx:id="qrMenu" mnemonicParsing="false" onAction="#OpenQuantity" text="RNA-seq" />
+                              <MenuItem fx:id="qbMenu" mnemonicParsing="false" onAction="#OpenQuantity" text="Beta Values" />
+                              <MenuItem fx:id="qqMenu" mnemonicParsing="false" onAction="#OpenQuantity" text="Quantile" />
+                          </items>
+                        </Menu>
+
+                        <Menu mnemonicParsing="false" text="K-Means">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#OpenClusteredFeature" text="Create Clusters" />
+                                <MenuItem mnemonicParsing="false" onAction="#LoadClusteredFeature" text="Load Clusters" />
+                            </items>
+                        </Menu>
+                        
+                        <Menu fx:id="msigMenu" mnemonicParsing="false" text="MSigDB">
+                          <items>
+                              <MenuItem mnemonicParsing="false" onAction="#browseMsig" text="Download ..." />
+                            <MenuItem mnemonicParsing="false" onAction="#SetMsigDir" text="Set Directory ..." />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                          </items>
+                        </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="dcgmenu" mnemonicParsing="false" onAction="#DeleteCheckedGroups" text="Delete Checked Group" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="cagmenu" mnemonicParsing="false" onAction="#CheckAllGroups" text="Check All" />
+                        <MenuItem fx:id="uagmenu" mnemonicParsing="false" onAction="#UncheckAllGroups" text="Uncheck All" />
+                        <MenuItem fx:id="icgmenu" disable="true" mnemonicParsing="false" onAction="#InvertCheckedGroups" text="Invert Check" />
+                    </items>
+                </Menu>
+              <Menu mnemonicParsing="false" text="Export">
+                <items>
+                              <MenuItem fx:id="etabmenu" mnemonicParsing="false" onAction="#ExportTable" text="Export As Table" />
+                  <MenuItem fx:id="epngmenu" mnemonicParsing="false" onAction="#ExportPNG" text="Export As PNG" />
+                  <MenuItem fx:id="epdfmenu" mnemonicParsing="false" onAction="#ExportPDF" text="Export As PDF" />
+                  <MenuItem fx:id="eepsmenu" mnemonicParsing="false" onAction="#ExportEPS" text="Export As EPS" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <CheckMenuItem fx:id="DisplayFile" mnemonicParsing="false" selected="true" text="Display file" />
+                </items>
+              </Menu>
+                <Menu mnemonicParsing="false" text="View">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#CollapsePanels" text="Collapse Sidepanels">
+                      <accelerator>
+                        <KeyCodeCombination alt="UP" code="DIGIT1" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                      </accelerator>
+                    </MenuItem>
+                    <MenuItem mnemonicParsing="false" onAction="#ShowPanels" text="Show Sidepanels">
+                      <accelerator>
+                        <KeyCodeCombination alt="UP" code="DIGIT2" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                      </accelerator>
+                    </MenuItem>
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#ClearGraph" text="Clear Graph Panel" />
+                    <MenuItem mnemonicParsing="false" onAction="#ClearSelection" text="Clear Data Selection" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+          </children>
+        </HBox>
+        <HBox id="HBox" fx:id="ControlPane" alignment="TOP_LEFT" maxHeight="77.0" minHeight="77.0" prefHeight="77.0" styleClass="base-container" VBox.vgrow="NEVER">
+          <children>
+            <VBox prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarContainer" HBox.hgrow="NEVER">
+              <children>
+                <GridPane>
+                  <children>
+                    <VBox id="DrawButton" onMouseClicked="#DrawChart" onMouseEntered="#HidePopPanels" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/chart.png" />
+                          </image>
+                          <VBox.margin>
+                            <Insets fx:id="" />
+                          </VBox.margin>
+                        </ImageView>
+                        <Label disable="false" text="Chart" />
+                      </children>
+                    </VBox>
+                    <VBox id="DrawHeatmapButton" onMouseClicked="#DrawHeatmap" onMouseEntered="#HidePopPanels" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/heatmap.png" />
+                          </image>
+                        </ImageView>
+                        <Label disable="false" text="Heatmap" />
+                      </children>
+                    </VBox>
+                    <VBox id="" onMouseClicked="#ReloadAll" onMouseEntered="#HidePopPanels" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/table.png" />
+                          </image>
+                        </ImageView>
+                        <Label disable="false" text="Reload" />
+                      </children>
+                    </VBox>
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="-1.0" prefHeight="-1.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Generate" />
+              </children>
+            </VBox>
+                  <VBox onMouseEntered="#HidePopPanels" prefWidth="10.0" />
+            <VBox prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarContainer">
+              <children>
+                <GridPane>
+                  <children>
+                    <VBox onMouseEntered="#ShowGraphOpts" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/graph.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Graph" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseEntered="#ShowClusteringPane" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/tree.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Cluster" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseEntered="#ShowColorOpts" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/colors.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Colors" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseEntered="#ShowEditLabels" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/alpha.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Labels" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseEntered="#ShowXAxisPanel" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="4" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/xaxis.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="X-Axis" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseEntered="#ShowYAxisPanel" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="5" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/yaxis.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Y-Axis" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseEntered="#ShowZoomPane" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="6" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/mag.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Scale" />
+                      </children>
+                    </VBox>
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="-1.0" prefHeight="-1.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Preferences" />
+              </children>
+            </VBox>
+                  <VBox onMouseEntered="#HidePopPanels" prefWidth="10.0" />
+            <VBox prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarContainer">
+              <children>
+                <GridPane>
+                  <children>
+                    <VBox onMouseClicked="#ActivateWrite" onMouseEntered="#ShowWritePane" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/write.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Write" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseClicked="#ActivateDraw" onMouseEntered="#ShowDrawPane" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/draw.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Draw" />
+                      </children>
+                    </VBox>
+                    <VBox onMouseClicked="#ActivateMove" onMouseEntered="#HidePopPanels" prefHeight="-1.0" prefWidth="-1.0" styleClass="toolbarButton" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                      <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../images/move.png" />
+                          </image>
+                        </ImageView>
+                        <Label text="Move" />
+                      </children>
+                    </VBox>
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="-1.0" prefHeight="-1.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Toolbox" />
+              </children>
+            </VBox>
+                  <VBox onMouseEntered="#HidePopPanels" opacity="0.0" prefWidth="100.0" />
+          </children>
+        </HBox>
+        <AnchorPane id="AnchorPane" onMouseEntered="#HidePopPanels" prefHeight="-1.0" VBox.vgrow="ALWAYS">
+          <children>
+            <SplitPane id="BodySplit" fx:id="BodyPane" dividerPositions="0.206" focusTraversable="true" prefHeight="-1.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <items>
+                <AnchorPane id="AnchorPane" fx:id="DataAnchorPane" maxWidth="400.0" minWidth="0.0" prefHeight="-1.0" prefWidth="200.0">
+                  <children>
+                    <SplitPane id="DataPane" fx:id="ItemPane" dividerPositions="0.23450586264656617, 0.7554438860971524" focusTraversable="true" maxWidth="-1.0" minWidth="0.0" orientation="VERTICAL" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="60.0" prefWidth="160.0">
+                          <children>
+                            <VBox id="VBox" alignment="TOP_LEFT" spacing="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <children>
+                                <TableView id="SamplesTable" fx:id="stable" editable="false" prefHeight="166.0" prefWidth="136.0" tableMenuButtonVisible="false" VBox.vgrow="ALWAYS">
+                                  <columns>
+                                    <TableColumn fx:id="sValue" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" resizable="false" sortable="true" text="" />
+                                    <TableColumn fx:id="sName" maxWidth="161.0" minWidth="161.0" prefWidth="161.0" resizable="true" text="Sample name" />
+                                  </columns>
+                                </TableView>
+                                <ProgressBar fx:id="progBar" maxWidth="400.0" prefWidth="200.0" progress="0.0" VBox.vgrow="ALWAYS" />
+                              </children>
+                            </VBox>
+                          </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="60.0" prefWidth="160.0">
+                          <children>
+                            <VBox id="VBox" alignment="TOP_LEFT" spacing="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <children>
+                                <TitledPane fx:id="SearchBar" alignment="TOP_LEFT" animated="false" collapsible="true" content="$null" contentDisplay="LEFT" disable="false" expanded="false" graphicTextGap="4.0" maxHeight="22.0" minHeight="22.0" onMouseClicked="#ToggleSearch" prefHeight="22.0" prefWidth="-1.0" text="Search features" textAlignment="LEFT" />
+                                <AnchorPane id="Content" fx:id="SearchPane" maxHeight="0.0" minHeight="0.0" minWidth="-1.0" prefHeight="0.0" prefWidth="-1.0" styleClass="graph-pane" visible="true" VBox.vgrow="NEVER">
+                                  <children>
+                                    <TextField fx:id="SearchText" alignment="CENTER_LEFT" prefHeight="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="1.0" />
+                                    <Button fx:id="findButton" mnemonicParsing="false" onAction="#OnSearchFeature" prefHeight="20.0" text="Find" textAlignment="CENTER" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                                  </children>
+                                  <padding>
+                                    <Insets top="5.0" />
+                                  </padding>
+                                </AnchorPane>
+                                <TableView id="SamplesTable" fx:id="ftable" editable="false" prefHeight="371.0" prefWidth="206.0" tableMenuButtonVisible="false" VBox.vgrow="ALWAYS">
+                                  <columns>
+                                    <TableColumn fx:id="fValue" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" resizable="false" sortable="true" text="" />
+                                    <TableColumn fx:id="fName" maxWidth="161.0" minWidth="161.0" prefWidth="161.0" resizable="true" text="Feature name" visible="true" />
+                                  </columns>
+                                </TableView>
+                                <ProgressBar fx:id="progBarGroupClustering" maxWidth="400.0" prefWidth="200.0" progress="0.0" VBox.vgrow="ALWAYS" />
+                              </children>
+                            </VBox>
+                          </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                          <children>
+                            <TableView id="SamplesTable" fx:id="gtable" editable="false" prefHeight="207.0" prefWidth="136.0" tableMenuButtonVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <columns>
+                                <TableColumn fx:id="gValue" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" resizable="false" sortable="true" text="" />
+                                <TableColumn fx:id="gName" maxWidth="161.0" minWidth="161.0" prefWidth="161.0" resizable="true" text="Group name" />
+                              </columns>
+                            </TableView>
+                          </children>
+                        </AnchorPane>
+                      </items>
+                    </SplitPane>
+                  </children>
+                </AnchorPane>
+                <StackPane id="StackPane" fx:id="GraphStack">
+                  <children>
+                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" vbarPolicy="NEVER" StackPane.alignment="TOP_LEFT" styleClass="graph-pane">
+                      <content>
+                        <AnchorPane id="Content" fx:id="GraphPane" minHeight="597.0" minWidth="791.0" prefHeight="-1.0" prefWidth="-1.0" styleClass="graph-pane">
+                          <stylesheets>
+                            <URL value="@FormStyle.css" />
+                          </stylesheets>
+                        </AnchorPane>
+                      </content>
+                      <StackPane.margin>
+                          <Insets left="24.0" top="24.0" right="16.0" bottom="16.0"/>
+                      </StackPane.margin>
+                      <stylesheets>
+                        <URL value="@FormStyle.css" />
+                      </stylesheets>
+                    </ScrollPane>
+                    
+                    <ScrollBar fx:id="scrollBarX" orientation="HORIZONTAL" minHeight="16" maxHeight="16" min="0" max="0" unitIncrement="1" blockIncrement="100" StackPane.alignment="BOTTOM_RIGHT">
+                        <StackPane.margin>
+                            <Insets right="16.0" />
+                        </StackPane.margin>
+                    </ScrollBar>
+                    <ScrollBar fx:id="scrollBarY" orientation="VERTICAL" minWidth="16" maxWidth="16" min="0" max="0" unitIncrement="1" blockIncrement="100" StackPane.alignment="BOTTOM_RIGHT">
+                        <StackPane.margin>
+                            <Insets bottom="16.0"/>
+                        </StackPane.margin>
+                    </ScrollBar>
+                    
+                    <Slider fx:id="YzoomSlider" majorTickUnit="10.0" max="25.0" maxHeight="120.0" min="10.0" minHeight="120.0" minorTickCount="1" orientation="VERTICAL" prefHeight="120.0" rotate="180.0" showTickLabels="false" StackPane.alignment="TOP_LEFT">
+                      <StackPane.margin>
+                        <Insets left="7.0" top="25.0" />
+                      </StackPane.margin>
+                    </Slider>
+                    <DoubleSlider fx:id="YRangeSlider" majorTickUnit="1" max="99" maxHeight="240.0" min="0" minHeight="240.0" minorTickCount="1000" orientation="VERTICAL" prefHeight="120.0" rotate="180.0" showTickLabels="false" StackPane.alignment="TOP_LEFT">
+                      <StackPane.margin>
+                        <Insets left="7.0" top="155.0" />
+                      </StackPane.margin>
+                      <stylesheets>
+                          <URL value="@/doubleslider/double_slider.css" />
+                      </stylesheets>
+                    </DoubleSlider>
+                    <Slider fx:id="XzoomSlider" majorTickUnit="10.0" max="25.0" maxWidth="120.0" min="10.0" minWidth="120.0" minorTickCount="1" prefWidth="120.0" showTickMarks="false" StackPane.alignment="TOP_LEFT">
+                      <StackPane.margin>
+                        <Insets left="7.0" top="7.0" />
+                      </StackPane.margin>
+                    </Slider>
+                  </children>
+                </StackPane>
+              </items>
+            </SplitPane>
+          </children>
+        </AnchorPane>
+      </children>
+    </VBox>
+    <AnchorPane id="PopupPanel" fx:id="GraphPopPanel" layoutX="153.0" layoutY="85.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+          <children>
+            <Label text="Graph Type" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+            <RadioButton id="" fx:id="LineRadioButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#ChangeType" onMouseClicked="#ChangeType" selected="false" text="Line" GridPane.columnIndex="1" GridPane.rowIndex="0">
+              <toggleGroup>
+                <ToggleGroup fx:id="GraphTypeToggleGroup" />
+              </toggleGroup>
+            </RadioButton>
+            <RadioButton id="" fx:id="AreaRadioButton" mnemonicParsing="false" onAction="#ChangeType" onMouseClicked="#ChangeType" text="Area" toggleGroup="$GraphTypeToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Label text="Legend" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <RadioButton fx:id="LTopRadioButton" mnemonicParsing="false" onAction="#ChangeLegend" selected="false" text="Top" GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <toggleGroup>
+                <ToggleGroup fx:id="LegendToggleGroup" />
+              </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="LRightRadioButton" mnemonicParsing="false" onAction="#ChangeLegend" text="Right" toggleGroup="$LegendToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <RadioButton fx:id="LBottomRadioButton" mnemonicParsing="false" onAction="#ChangeLegend" text="Bottom" toggleGroup="$LegendToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <RadioButton fx:id="LLeftRadioButton" mnemonicParsing="false" onAction="#ChangeLegend" text="Left" toggleGroup="$LegendToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <RadioButton fx:id="LNoneRadioButton" mnemonicParsing="false" onAction="#ChangeLegend" text="None" toggleGroup="$LegendToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+            <Label text="Symbol" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+            <RadioButton fx:id="CircleRadioButton" mnemonicParsing="false" onAction="#ChangeSymbol" selected="false" text="Circle" GridPane.columnIndex="1" GridPane.rowIndex="9">
+              <toggleGroup>
+                <ToggleGroup fx:id="SymbolToggleGroup" />
+              </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="SquareRadioButton" mnemonicParsing="false" onAction="#ChangeSymbol" text="Square" toggleGroup="$SymbolToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <RadioButton fx:id="DiamondRadioButton" minWidth="80.0" mnemonicParsing="false" onAction="#ChangeSymbol" text="Diamond" toggleGroup="$SymbolToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <RadioButton fx:id="NoSymbolRadioButton" mnemonicParsing="false" onAction="#ChangeSymbol" text="None" toggleGroup="$SymbolToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="13" />
+            <Label text="Line Weight" GridPane.rowIndex="14" />
+            <TextField fx:id="lineWeightField" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+            <Label text="Max. Series" GridPane.rowIndex="15" />
+            <TextField fx:id="maxSeriesField" onKeyReleased="#ChangeMaxSeries" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <stylesheets>
+        <URL value="@FormStyle.css" />
+      </stylesheets>
+    </AnchorPane>
+    <AnchorPane id="PopupPanel" fx:id="ColorsPopPanel" layoutX="272.0" layoutY="84.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+          <children>
+            <Label text="Drawing area" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+            <Label text="Graph area" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Gridlines, X-axis" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+            <Label text="Gridlines, Y-axis" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+            <Label text="Tick lines" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+            <Label text="Graph title" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label text="Axes labels" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Label text="Legend background" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <Label text="Legend labels" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <Label text="Tick labels" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+            <Label text="Graph border" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label text="Symbol fill" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+            
+            <!-- BEGIN Entries for heatmap configuration -->
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="12" />
+            
+            <Label text="Presets" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="13" />
+            <Label text="Color 1" GridPane.columnIndex="0" GridPane.rowIndex="14" />
+            <Label text="Value 1" GridPane.columnIndex="0" GridPane.rowIndex="15" />
+            <Label text="Color 2" GridPane.columnIndex="0" GridPane.rowIndex="16" />
+            <Label text="Color 2" GridPane.columnIndex="0" GridPane.rowIndex="17" />
+            <Label text="Color 3" GridPane.columnIndex="0" GridPane.rowIndex="18" />
+            <Label text="Color 3" GridPane.columnIndex="0" GridPane.rowIndex="19" />
+            <!-- END Entries for Heatmap configuration -->
+            <ColorPicker fx:id="backgroundColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeBackgroundColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="0">
+              <stylesheets>
+                <URL value="@FormStyle.css" />
+              </stylesheets>
+            </ColorPicker>
+            <ColorPicker id="BGColor" fx:id="chartAreaColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeChartAreaColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ColorPicker maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeXGridLinesColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="xGridLinesColor" />
+            <ColorPicker fx:id="yGridLinesColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeYGridLinesColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ColorPicker fx:id="tickLinesColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeTickLinesColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" promptText="" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <ColorPicker id="fontColor" fx:id="titleColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeTitleColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ColorPicker fx:id="axisColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeAxisColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ColorPicker fx:id="legLabelsColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeLegendLabelsColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ColorPicker fx:id="legBgColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeLegendBgColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ColorPicker fx:id="tickLabelsColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeTickLabelsColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ColorPicker fx:id="chartBorderColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeBorderColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ColorPicker fx:id="symbolFillColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeSymbolFillColor" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+
+            <!-- BEGIN Entries for heatmap configuration -->
+            <ComboBox fx:id="heatmapPreset" value="=== Select ===" onAction="#ChangeHeatmapPreset" maxHeight="22.0" maxWidth="120.0" minHeight="22.0" minWidth="120.0" prefHeight="22.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="=== Select ===" />
+                  <String fx:value="Red-Green" />
+                  <String fx:value="Red-Blue" />
+                  <String fx:value="Red-Black" />
+                  <String fx:value="Red-Yellow" />
+                  <String fx:value="Blue-Red" />
+                  <String fx:value="Green-Red" />
+                  <String fx:value="Black-Red" />
+                  <String fx:value="Red-Black-Green" />
+                  <String fx:value="Red-White-Blue" />
+                  <String fx:value="Green-Black-Red" />
+                  <String fx:value="Blue-White-Red" />
+                  <String fx:value="Blue-Green-Yellow" />
+                  <String fx:value="Green-Yellow-Orange" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            
+            <ColorPicker fx:id="heatmapColor1" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeHeatmapColor1" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+            <ComboBox fx:id="heatmapValue1" editable="true" onAction="#ChangeHeatmapValue1" maxHeight="22.0" maxWidth="120.0" minHeight="22.0" minWidth="120.0" prefHeight="22.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="15">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="MAX" />
+                  <String fx:value="CENTER" />
+                  <String fx:value="MEAN" />
+                  <String fx:value="MIN" />
+                  <String fx:value="DISABLED" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <ColorPicker fx:id="heatmapColor2"  maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeHeatmapColor2" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+            <ComboBox fx:id="heatmapValue2" editable="true" onAction="#ChangeHeatmapValue2" maxHeight="22.0" maxWidth="120.0" minHeight="22.0" minWidth="120.0" prefHeight="22.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="17">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="MAX" />
+                  <String fx:value="CENTER" />
+                  <String fx:value="MEAN" />
+                  <String fx:value="MIN" />
+                  <String fx:value="DISABLED" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <ColorPicker fx:id="heatmapColor3"  maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ChangeHeatmapColor3" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+            <ComboBox fx:id="heatmapValue3" editable="true" onAction="#ChangeHeatmapValue3" maxHeight="22.0" maxWidth="120.0" minHeight="22.0" minWidth="120.0" prefHeight="22.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="19">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="MAX" />
+                  <String fx:value="CENTER" />
+                  <String fx:value="MEAN" />
+                  <String fx:value="MIN" />
+                  <String fx:value="DISABLED" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <!-- END Entries for Heatmap configuration -->
+
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <!-- BEGIN Entries for heatmap configuration -->
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+            <!-- END Entries for Heatmap configuration -->
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <stylesheets>
+        <URL value="@FormStyle.css" />
+      </stylesheets>
+    </AnchorPane>
+    <AnchorPane id="PopupPanel" fx:id="TextPopPanel" layoutX="333.0" layoutY="84.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+          <children>
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <Label text="Font family" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+              <GridPane.margin>
+                <Insets right="10.0" fx:id="x1" />
+              </GridPane.margin>
+            </Label>
+            <ComboBox fx:id="sizeCombo" maxHeight="22.0" maxWidth="120.0" minHeight="22.0" minWidth="120.0" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="6" />
+                  <String fx:value="7" />
+                  <String fx:value="8" />
+                  <String fx:value="9" />
+                  <String fx:value="10" />
+                  <String fx:value="11" />
+                  <String fx:value="12" />
+                  <String fx:value="13" />
+                  <String fx:value="14" />
+                  <String fx:value="16" />
+                  <String fx:value="18" />
+                  <String fx:value="20" />
+                  <String fx:value="22" />
+                  <String fx:value="24" />
+                  <String fx:value="28" />
+                  <String fx:value="32" />
+                  <String fx:value="36" />
+                  <String fx:value="40" />
+                  <String fx:value="44" />
+                  <String fx:value="52" />
+                  <String fx:value="57" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Label text="Size" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.margin="$x1" GridPane.rowIndex="6" />
+            <Label text="Title text" GridPane.columnIndex="0" GridPane.margin="$x4" GridPane.rowIndex="0" />
+            <TextField id="LabelTextField" fx:id="TitleField" maxHeight="25.0" maxWidth="120.0" minHeight="25.0" minWidth="120.0" prefHeight="25.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label text="X-Axis label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Y-Axis label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextField id="LabelTextField" fx:id="XAxisField" maxHeight="25.0" maxWidth="120.0" minHeight="25.0" minWidth="120.0" prefHeight="25.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField id="LabelTextField" fx:id="YAxisField" maxHeight="25.0" maxWidth="120.0" minHeight="25.0" minWidth="120.0" prefHeight="25.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Object" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <ComboBox fx:id="objectCombo" maxHeight="22.0" maxWidth="120.0" minHeight="22.0" minWidth="120.0" onAction="#ChangeFontObject" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="120.0" value="Graph title" GridPane.columnIndex="1" GridPane.margin="$x4" GridPane.rowIndex="4">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Graph title" />
+                  <String fx:value="Axes" />
+                  <String fx:value="Tick labels" />
+                  <String fx:value="Legend labels" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <ComboBox fx:id="fontCombo" maxHeight="22.0" maxWidth="120.0" minHeight="22.0" minWidth="120.0" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="120.0" promptText="" GridPane.columnIndex="1" GridPane.margin="$x4" GridPane.rowIndex="5" />
+            <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#ChangeFont" prefWidth="120.0" text="Change Font" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <stylesheets>
+        <URL value="@FormStyle.css" />
+      </stylesheets>
+    </AnchorPane>
+    <AnchorPane id="PopupPanel" fx:id="XAxisPopPanel" layoutX="393.0" layoutY="85.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="24.0">
+          <children>
+            <Label text="Tick labels" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Tick marks" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Max tick count" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label text="Gridlines" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label text="Tick width" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <Label text="Tick length" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+
+            <CheckBox fx:id="xAxisTickLabelCheckBox" mnemonicParsing="false" onMouseClicked="#ChangeXTickLabelVisibility" selected="false" text="Visible" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <CheckBox fx:id="xAxisTickMarkCheckBox" mnemonicParsing="false" onMouseClicked="#ChangeXTickMarksVisibility" selected="false" text="Visible" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="xAxisTickCountField" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onKeyReleased="#ChangeXMaxTickCount" prefHeight="22.0" prefWidth="90.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="xAxisGridlinesCombo" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onAction="#ChangeXGridLines" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="90.0" value="Solid" GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Solid" />
+                  <String fx:value="None" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            
+            <ComboBox fx:id="xAxisTickWidthCombo" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onAction="#ChangeXTickWidth" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="90.0" value="1" GridPane.columnIndex="1" GridPane.rowIndex="5">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="1" />
+                  <String fx:value="2" />
+                  <String fx:value="3" />
+                  <String fx:value="4" />
+                  <String fx:value="5" />
+                  <String fx:value="6" />
+                  <String fx:value="7" />
+                  <String fx:value="8" />
+                  <String fx:value="9" />
+                  <String fx:value="10" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <ComboBox fx:id="xAxisTickLengthCombo" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onAction="#ChangeXTickLength" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="90.0" value="8" GridPane.columnIndex="1" GridPane.rowIndex="6">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="2" />
+                  <String fx:value="5" />
+                  <String fx:value="8" />
+                  <String fx:value="10" />
+                  <String fx:value="15" />
+                  <String fx:value="20" />
+                  <String fx:value="25" />
+                  <String fx:value="30" />
+                  <String fx:value="35" />
+                  <String fx:value="40" />
+                  <String fx:value="45" />
+                  <String fx:value="50" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="0.0" minWidth="90.0" prefWidth="90.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <stylesheets>
+        <URL value="@FormStyle.css" />
+      </stylesheets>
+    </AnchorPane>
+    <AnchorPane id="PopupPanel" fx:id="YAxisPopPanel" layoutX="452.0" layoutY="85.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="24.0">
+          <children>
+            <Label text="Tick labels" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Tick marks" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Max tick count" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label text="Gridlines" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label text="Transform" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <Label text="Constant" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <Label text="Tick width" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+            <Label text="Tick length" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+            
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="9" />
+            
+            <CheckBox fx:id="yAxisTickLabelCheckBox" mnemonicParsing="false" onMouseClicked="#ChangeYTickLabelVisibility" selected="false" text="Visible" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <CheckBox fx:id="yAxisTickMarkCheckBox" mnemonicParsing="false" onMouseClicked="#ChangeYTickMarksVisibility" selected="false" text="Visible" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="yAxisTickCountField" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onKeyReleased="#ChangeYMaxTickCount" prefHeight="22.0" prefWidth="90.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="yAxisGridlinesCombo" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onAction="#ChangeYGridLines" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="90.0" value="Solid" GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Solid" />
+                  <String fx:value="None" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            
+            <ComboBox fx:id="yAxisTransform" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onAction="#ChangeYTransform" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="90.0" value="No" GridPane.columnIndex="1" GridPane.rowIndex="5">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="No" />
+                  <String fx:value="Logarithm" />
+                  <String fx:value="Standardization" />
+                  <String fx:value="Quantile" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            
+            <TextField fx:id="yAxisConstantFactorField" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onKeyReleased="#ChangeConstantFactor" prefHeight="22.0" prefWidth="90.0" text="1.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            
+            <Label text="Smoothing" GridPane.rowIndex="8" />
+            <TextField fx:id="smoothingField" onKeyReleased="#ChangeSmoothingBin" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            
+            <ComboBox fx:id="yAxisTickWidthCombo" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onAction="#ChangeYTickWidth" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="90.0" value="1" GridPane.columnIndex="1" GridPane.rowIndex="10">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="1" />
+                  <String fx:value="2" />
+                  <String fx:value="3" />
+                  <String fx:value="4" />
+                  <String fx:value="5" />
+                  <String fx:value="6" />
+                  <String fx:value="7" />
+                  <String fx:value="8" />
+                  <String fx:value="9" />
+                  <String fx:value="10" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <ComboBox fx:id="yAxisTickLengthCombo" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" onAction="#ChangeYTickLength" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="90.0" value="8" GridPane.columnIndex="1" GridPane.rowIndex="11">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="2" />
+                  <String fx:value="5" />
+                  <String fx:value="8" />
+                  <String fx:value="10" />
+                  <String fx:value="15" />
+                  <String fx:value="20" />
+                  <String fx:value="25" />
+                  <String fx:value="30" />
+                  <String fx:value="35" />
+                  <String fx:value="40" />
+                  <String fx:value="45" />
+                  <String fx:value="50" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="0.0" minWidth="90.0" prefWidth="90.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="NEVER" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <stylesheets>
+        <URL value="@FormStyle.css" />
+      </stylesheets>
+    </AnchorPane>
+    <AnchorPane id="PopupPanel" fx:id="ZoomPopPanel" layoutX="532.0" layoutY="85.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane visible="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
+          <children>
+            <Label text="X-Axis" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Y-Axis" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Hyperlink onAction="#ResetScale" text="Reset axis scales" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <TextField fx:id="XScaleField" disable="true" editable="false" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" opacity="0.9" prefHeight="22.0" prefWidth="90.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <TextField fx:id="YScaleField" disable="true" editable="false" maxHeight="22.0" maxWidth="90.0" minHeight="22.0" minWidth="90.0" opacity="0.9" prefHeight="22.0" prefWidth="90.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <stylesheets>
+        <URL value="@FormStyle.css" />
+      </stylesheets>
+    </AnchorPane>
+    <AnchorPane id="PopupPanel" fx:id="ClusteringPopPanel" layoutX="212.0" layoutY="85.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane visible="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
+          <children>
+            <Label text="Clustering" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Number of Clusters" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Linkage" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label text="Distance"  GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label text="Grouping" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Label text="Row Height" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <ComboBox fx:id="clusteringCombo" maxHeight="22.0" maxWidth="100.0" minHeight="22.0" minWidth="100.0" onAction="#ChangeClustering" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="100.0" value="Hierarchical" GridPane.columnIndex="1" GridPane.rowIndex="0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="No" />
+                  <String fx:value="Hierarchical" />
+                  <String fx:value="KMean" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <TextField fx:id="numClusters" maxHeight="22.0" maxWidth="50.0" minHeight="22.0" minWidth="50.0" prefHeight="22.0" prefWidth="50.0" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="linkTypeCombo" maxHeight="22.0" maxWidth="100.0" minHeight="22.0" minWidth="100.0" onAction="#ChangeLinkType" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="100.0" value="Average" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Single" />
+                  <String fx:value="Complete" />
+                  <String fx:value="Average" />
+                  <String fx:value="Mean" />
+                  <String fx:value="Centroid" />
+                  <String fx:value="Ward" />
+                  <String fx:value="Adjusted Complete" />
+                  <String fx:value="Neighbor Joining" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <ComboBox fx:id="distanceCombo" maxHeight="22.0" maxWidth="100.0" minHeight="22.0" minWidth="100.0" onAction="#ChangeDistanceFunction" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="100.0" value="Euclidean" GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Euclidean" />
+                  <String fx:value="Manhattan" />
+                  <String fx:value="Chebyshev" />
+                </FXCollections>
+              </items>
+            </ComboBox> 
+            <ComboBox fx:id="groupingCombo" maxHeight="22.0" maxWidth="150.0" minHeight="22.0" minWidth="150.0" onAction="#ChangeGroupingType" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="100.0" value="Hierarchical" GridPane.columnIndex="1" GridPane.rowIndex="4">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="No" />
+                  <String fx:value="Sample in a row" />
+                  <String fx:value="Sample by column" />
+                </FXCollections>
+              </items>
+            </ComboBox>            
+            <TextField fx:id="rowHeight" maxHeight="22.0" maxWidth="50.0" minHeight="22.0" minWidth="50.0" prefHeight="22.0" prefWidth="50.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <stylesheets>
+        <URL value="@FormStyle.css" />
+      </stylesheets>
+    </AnchorPane>
+    <AnchorPane fx:id="DrawPopPanel" layoutX="595.0" layoutY="85.0" minHeight="-1.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane visible="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
+          <children>
+            <Label text="Draw color" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Line width" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <ColorPicker fx:id="DrawColor" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" onAction="#ActivateDraw" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="25.0" prefWidth="100.0" styleClass="split-pane" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <ComboBox fx:id="DrawWeight" maxHeight="22.0" maxWidth="100.0" minHeight="22.0" minWidth="100.0" onAction="#ActivateDraw" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="100.0" value="3" GridPane.columnIndex="1" GridPane.rowIndex="1">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="1" />
+                  <String fx:value="2" />
+                  <String fx:value="3" />
+                  <String fx:value="4" />
+                  <String fx:value="5" />
+                  <String fx:value="6" />
+                  <String fx:value="6" />
+                  <String fx:value="7" />
+                  <String fx:value="8" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Hyperlink onAction="#ClearDraws" text="Clear drawings" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+    </AnchorPane>
+    <AnchorPane id="DrawPopPanel" fx:id="WritePopPanel" layoutX="645.0" layoutY="85.0" minHeight="-1.0" onMouseEntered="#EnterPopUp" onMouseExited="#ExitPopUp" prefHeight="-1.0" prefWidth="-1.0" styleClass="PopupPanel" visible="false">
+      <children>
+        <GridPane visible="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
+          <children>
+            <Label text="Font family" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Font size" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Separator prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Hyperlink onAction="#ClearWrites" text="Clear texts" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <ComboBox fx:id="WriteFont" maxHeight="22.0" maxWidth="100.0" minHeight="22.0" minWidth="100.0" onAction="#ActivateWrite" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="100.0" value="System" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <ComboBox id="WriteFont" fx:id="WriteSize" maxHeight="22.0" maxWidth="100.0" minHeight="22.0" minWidth="100.0" onAction="#ActivateWrite" onHiding="#OnHidingChildPopup" onShowing="#OnShowingChildPopup" prefHeight="22.0" prefWidth="100.0" value="11" GridPane.columnIndex="1" GridPane.rowIndex="1">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="6" />
+                  <String fx:value="7" />
+                  <String fx:value="8" />
+                  <String fx:value="9" />
+                  <String fx:value="10" />
+                  <String fx:value="11" />
+                  <String fx:value="12" />
+                  <String fx:value="13" />
+                  <String fx:value="14" />
+                  <String fx:value="16" />
+                  <String fx:value="18" />
+                  <String fx:value="20" />
+                  <String fx:value="22" />
+                  <String fx:value="24" />
+                  <String fx:value="28" />
+                  <String fx:value="32" />
+                  <String fx:value="36" />
+                  <String fx:value="40" />
+                  <String fx:value="44" />
+                  <String fx:value="52" />
+                  <String fx:value="57" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+    </AnchorPane>
+    <AnchorPane fx:id="MessagePanel" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" styleClass="MessageBoxPanel" visible="false" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+      <children>
+        <ImageView fitHeight="12.0" fitWidth="12.0" onMouseClicked="#HideError" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="12.0">
+          <image>
+            <Image url="@../images/close.png" />
+          </image>
+        </ImageView>
+        <VBox prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="10.0">
+          <children>
+            <Label fx:id="MessageHeader" prefWidth="-1.0" styleClass="Messageheader" text="Warning" VBox.vgrow="ALWAYS" />
+            <Label fx:id="MessageBody" prefWidth="-1.0" text="Label" VBox.vgrow="ALWAYS" />
+          </children>
+        </VBox>
+        <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+          <image>
+            <Image url="@../images/Warning.png" />
+          </image>
+        </ImageView>
+      </children>
+    </AnchorPane>
+  </children>
+  <stylesheets>
+    <URL value="@FormStyle.css" />
+  </stylesheets>
+</AnchorPane>

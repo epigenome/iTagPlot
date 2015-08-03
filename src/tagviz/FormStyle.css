@@ -1,0 +1,284 @@
+
+.theme {
+    -fx-font-size: 11px;
+    master-color: grey;
+    graph-pane: #FEFEFE
+}
+
+.toplabel {
+    -fx-font-size: 14px;
+}
+
+/*==============================================================================
+/*  PANELS
+/*============================================================================*/
+
+.control-pane{
+    -fx-padding: 0;
+    -fx-border-width: 2 0 0 0;
+    -fx-border-color: #444444;
+    -fx-background-color: #666666;
+}
+.PopupPanel  {
+    -fx-background-color: linear-gradient(white 25%, #f8f8f8 100%);
+    -fx-background-radius: 4;
+    -fx-background-insets: 0, 1;
+    -fx-border-color: #aaaaaa;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;        
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.3) , 12, 0.0 , 0 , 1 );   
+}
+.graph-pane{
+    -fx-background-color: derive(graph-pane, 100%);
+}
+.split-pane, .button-pane {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+}
+.button-pane-toolbar{
+    -fx-border-color: #999999;
+    -fx-border-width: 0 0 1 0;
+}
+
+/*==============================================================================
+/*  CONTROLS
+/*============================================================================*/
+
+.button {
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-radius: 4, 3;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.55) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: derive(master-color, -60%);
+    -fx-padding: 3 11 3 11;
+} 
+.button:hover{
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#5a61af, #51536d),
+        linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, 
+        #88c6fb 51%, #d5faff 100%);
+}
+
+.button Text {
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.8), 0, 0.0, 0, 1);
+}
+
+.colorpicker-menu-item:focused, .combobox-menu-item:focused {
+    -fx-background-color: transparent;
+}
+
+.colorpicker-menu-item:focused .label, .combobox-menu-item:focused .label{
+    -fx-text-fill: black;
+}
+
+.list-view:focused {
+    -fx-background-color: #9a9a9a, #FFFFFF;
+    -fx-background-insets: 0, 1;
+}
+
+.progress-bar .bar { 
+    -fx-padding: 2px; 
+    -fx-background-insets: 0;
+}
+
+/*==============================================================================
+/*  ERROR MESSAGE
+/*============================================================================*/
+
+.MessageBoxPanel  {
+    -fx-background-color: linear-gradient(rgba(255,255,255,0.9) 25%, 
+        rgba(240,240,240,0.9)  100%);
+    -fx-background-radius: 4;
+    -fx-background-insets: 0, 1;
+    -fx-border-color: #999999;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;        
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 12, 0.0 , 0 , 1 );
+}
+.Messageheader{
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #666666;
+}
+
+/*==============================================================================
+/*  TABLEVIEWS
+/*============================================================================*/
+
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}        
+.table-view *.scroll-bar:horizontal *.increment-arrow, 
+.table-view *.scroll-bar:horizontal *.decrement-arrow {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+.table-view .column-header .label {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 5 0 5;
+}
+.table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 5 0 5;
+}    
+.titled-pane > .title {
+    -fx-background-radius: 0; 
+}
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color, -fx-cell-focus-inner-border, -fx-selection-bar;
+    -fx-background-insets: 0 1 0 0, 1 2 1 1, 2 3 2 2;
+    -fx-background: -fx-accent;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+.table-row-cell:filled:selected:focused, .table-row-cell:filled:selected {
+    -fx-background-color: -fx-selection-bar;
+    -fx-background: -fx-accent;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+.table-row-cell:selected .text {
+    -fx-fill: -fx-light-text-color;
+}
+
+/*==============================================================================
+/*  GRAPH
+/*============================================================================*/
+
+.chart {
+    -fx-padding: 20px; 
+    -fx-background-color: transparent;
+}
+.axis-label{   
+    -fx-padding: 10px 0 10px 0; 
+    -fx-alignment: CENTER;
+}
+.chart-legend{
+    -fx-padding: 4px 10px 4px 10px;
+}
+
+.chart-plot-background {
+    -fx-background-insets: 0, 1;
+}
+.chart-alternative-row-fill {
+    -fx-fill: transparent;
+}
+.chart-series-line, .chart-series-area {    
+    -fx-effect: null;
+}
+.axis-minor-tick-mark {
+    -fx-stroke: transparent;
+}
+
+/*==============================================================================
+/*  SYMBOLS
+/*============================================================================*/
+
+.no-symbol .chart-line-symbol, .no-symbol .chart-area-symbol {    
+    -fx-background-radius: 0px; 
+    -fx-padding: 0px;   
+} 
+.circle-symbol .chart-line-symbol, .circle-symbol .chart-area-symbol {    
+    -fx-background-radius: 5px; 
+    -fx-padding: 5px;
+}
+.square-symbol .chart-line-symbol, .square-symbol .chart-area-symbol {    
+    -fx-background-radius: 0;
+    -fx-padding: 5px;    
+}
+.diamond-symbol .chart-line-symbol, .diamond-symbol .chart-area-symbol {    
+    -fx-background-radius: 0; 
+    -fx-padding: 6px;
+    -fx-shape: "M9,0 L18,9 L9,18 L0,9 Z";     
+}
+.chart-info-label{
+    -fx-font-size: 14; 
+    -fx-font-weight: bold; 
+    -fx-padding: 3;   
+    -fx-background-color: white;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-stroke: #999999;
+    -fx-stroke-width: 1px;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.15) , 1,1,0,0 );      
+}
+
+.chart-legend-item-symbol, .no-symbol .chart-legend-item-symbol,
+.diamond-symbol .chart-legend-item-symbol, 
+.square-symbol .chart-legend-item-symbol,
+.circle-symbol .chart-legend-item-symbol{
+    -fx-background-radius: 0px;      
+    -fx-padding: 5px; 
+    -fx-shape: "M0,0 L8,0 L8,8 L0,8 Z";
+} 
+
+/*==============================================================================
+/*  TOOLBAR
+/*============================================================================*/
+
+.base-container {
+    -fx-padding: 3px;
+    -fx-background-color: linear-gradient(#ffffff 0%, #ced3da 4%, 
+        #c1c6cf 17%, #b4bbc5 18%, #e5ebeb 100%);        
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: rgba(0,0,0,0.3);
+
+}
+.toolbarContainer {
+    -fx-background-color: 
+        linear-gradient(#dae0e7 0%, #ced4dd 14%,  #c8ced7 15%, #dfe5e6 100%),
+        linear-gradient(#bdbfc1 0%, #9a9c9f 14%,  #888b90 15%, #838686 100%),
+        linear-gradient(#eef1f6 0%, #e1e6ee 14%,  #d5dbe7 15%, #eef4f4 83%,  
+        #ced4e6 83%, #afb6c8 100%);
+    -fx-background-insets: 1 0 1 1, 1, 2;
+    -fx-background-radius: 5,4,3;
+    -fx-padding: 4 8 0 8;
+    -fx-alignment: center;
+}
+
+.toolbarButton {
+    -fx-background-color: 
+        linear-gradient(#dae0e7 0%, #ced4dd 14%,  #c8ced7 15%, #dfe5e6 100%),
+        linear-gradient(#bdbfc1 0%, #9a9c9f 14%,  #888b90 15%, #838686 100%),
+        linear-gradient(#eef1f6 0%, #e1e6ee 14%,  #d5dbe7 15%, #eef4f4 73%,  
+        #ced4e6 100%);
+    -fx-font-size: 11px;
+    -fx-background-insets: 1 0 1 1, 1, 2;
+    -fx-background-radius: 5,4,3;
+    -fx-padding: 4 5 1 5;
+    -fx-alignment: center;
+}
+.toolbarButton:hover {
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#5a61af, #51536d),
+        linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, 
+        #d5faff 100%);
+    -fx-cursor:hand;
+}
+
+/*==============================================================================
+/*  WRITE TOOL TEXT FIELD
+/*============================================================================*/
+
+.custom-text-field, .custom-base {
+    -fx-background-color:  transparent, transparent;
+}
+
+.custom-text-field:focused, .custom-text-field:hover, 
+.custom-text-field:focused:hover {
+    -fx-background-color: CCCCCC, white;
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 4, 3;
+    -fx-cursor:text;
+}
